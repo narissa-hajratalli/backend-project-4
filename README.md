@@ -21,7 +21,7 @@ For the backend application, I plan to have three models total: user (for authen
 
 
 ## Time/Priority Matrix 
-- [Graphic](...)
+- [Graphic](https://res.cloudinary.com/ds7vqqwb8/image/upload/v1600052787/Project%203%20-%20leaft/IMG_1542_gzw2vb.heic)
 
 
 ## MVP/Post MVP
