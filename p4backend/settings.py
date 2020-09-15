@@ -38,8 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
-    'authentication.apps.AuthenticationConfig'
+    'authentication.apps.AuthenticationConfig',
+    'meat_consumption.apps.MeatConsumpConfig',
+    'rest_framework'
 ]
 
 REST_FRAMEWORK = {
@@ -138,11 +139,6 @@ STATIC_URL = '/static/'
 # django_heroku.settings(locals())
 
 
-import environ
-
-env = environ.Env()
-# reading .env file
-environ.Env.read_env()
 
 
 

@@ -22,6 +22,15 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
+    # URL is admin/..., finish with endpoints in admin.site.urls
+    # for admin login on Django GUI
     path('admin/', admin.site.urls),
-    path('auth/', include('authentication.urls'))
+
+    # URL is auth/..., finish with endpoints in authentication.urls
+    # For user creation, login, and show all users
+    path('auth/', include('authentication.urls')),
+
+    # URL is meat_consumption/..., finish with endpoints in meat_consumption.urls
+    # For CRUD endpoints
+    path('meat_consumption/', include('meat_consumption.urls'))
 ]
