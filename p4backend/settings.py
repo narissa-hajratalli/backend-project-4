@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'authentication.apps.AuthenticationConfig',
-    'meat_consumption.apps.MeatConsumpConfig',
+    'meat_consumption.apps.MeatConsumptionConfig',
     'rest_framework'
 ]
 

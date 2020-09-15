@@ -1,16 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import User, Group
-# from p4backend import settings
+from django.conf import settings
 
 
 # Create your models here.
 
 
 class DailyConsumption(models.Model):
-    consumed = models.BooleanField
+    consumed = models.BooleanField(default=False)
     daily_servings = models.PositiveSmallIntegerField(0)
-    day_consumed = models.DateField  # just the day of the week & date of the day meat was consumed, shows just individual day consumed
-    # user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # one user has many daily consumptions
+    day_consumed = models.DateField(default="2020-09-14")  # just the day of the week & date of the day meat was consumed, shows just individual day consumed
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, default=1, on_delete=models.CASCADE)  # one user has many daily consumptions
 
     class Meta:
         verbose_name_plural = 'daily_consumptions'

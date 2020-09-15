@@ -1,5 +1,4 @@
 from .models import DailyConsumption, WeeklyConsumption
-from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 
 
@@ -11,7 +10,7 @@ class DailyConsumptionSerializer(serializers.ModelSerializer):
 
         # what are the fields you would like to serialize, i.e. convert back and forth to json data
         # django provides the id, i.e. the primary key
-        fields = ('consumed', 'daily_servings', 'day_consumed')
+        fields = ('consumed', 'daily_servings', 'day_consumed', 'owner', 'id')
 
 
 class WeeklyConsumptionSerializer(serializers.ModelSerializer):

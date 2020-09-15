@@ -9,7 +9,7 @@ router.register('daily_consumption', DailyConsumptionViewSet, basename='daily_co
 
 
 custom_urlpatterns = [
-   url(r'daily_consumption/(?P<daily_consumption_pk>\d+)$', DailyConsumptionViewSet, name='daily_consumption_per_day')
+   url(r'daily_consumption/(?P<pk>\d+)$', DailyConsumptionViewSet.retrieve, name='daily_consumption_per_day')
    # Example pattern is: localhost:8000/meat_consumption/daily_consumption/1
 ]
 

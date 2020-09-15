@@ -14,6 +14,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
 # Create your views here.
+
 class DailyConsumptionViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     serializer_class = DailyConsumptionSerializer
@@ -25,10 +26,29 @@ class DailyConsumptionViewSet(viewsets.ModelViewSet):
         return queryset
 
     #############################################################################
-    # READ - SHOW JUST ONE DAY
-    def retrieve(self, request, *args, **kwargs):
-        queryset = DailyConsumption.objects.filter(pk=self.kwargs.get('daily_consumption_pk'))
+    # SHOW ONE - SHOW JUST ONE DAY
+    def retrieve(self, pk):
+        queryset = DailyConsumption.objects.get(pk=self.kwargs['pk'])
         return queryset
+
+    # def retrieve(self, request, *args, **kwargs):
+    #     daily_consumption = DailyConsumption.objects.get(pk=self.kwargs['pk'])
+    #     queryset = DailyConsumption.objects.filter(
+    #         pk=self.kwargs['pk']
+    #     )
+    #     return queryset
+
+    def retrieve(self, request, *args, **kwargs):
+        daily_consumption = DailyConsumption.objects.get(pk=self.kwargs['pk'])
+        return Response({
+
+        })
+        return queryset
+
+    # def get_queryset(self):
+    #     if self.kwargs.get("pk"):
+    #         daily_consumption = DailyConsumption.objects.get(pk=self.kwargs["pk"])
+    #         return daily_consumption
 
     #############################################################################
     # CREATE - CREATE A RECORD OF A DAY THAT MEAT WAS CONSUMED
@@ -65,3 +85,22 @@ class DailyConsumptionViewSet(viewsets.ModelViewSet):
     #############################################################################
     # UPDATE - PARTIAL UPDATE FOR JUST SERVING WHEN DAILY RECORD HAS BEEN CREATED
     # Don't allow user to input new date if already entered. Only allow user to update consumed and servings
+
+
+# class SingleDailyConsumption(generics.RetrieveUpdateDestroyAPIView):
+#     permission_classes = (IsAuthenticated,)
+#     serializer_class = DailyConsumptionSerializer
+#
+#     def retrieve(self, kwargs):
+#         queryset = DailyConsumption.objects.get(pk=self.kwargs["pk"])
+#         return queryset
+#
+#     def get_queryset(self):
+#         if self.kwargs.get("daily_consumption_pk"):
+#             daily_consumption = DailyConsumption.objects.get(pk=self.kwargs["daily_consumption_pk"])
+#             queryset = DailyConsumption.objects.filter(
+#                 pk=self.kwargs['daily_consumption_pk'],
+#                 owner=self.request.user,
+#                 daily_consumption=daily_consumption
+#             )
+#             return queryset

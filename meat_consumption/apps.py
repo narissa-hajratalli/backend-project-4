@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class MeatConsumpConfig(AppConfig):
+class MeatConsumptionConfig(AppConfig):
     name = 'meat_consumption'
