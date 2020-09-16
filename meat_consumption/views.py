@@ -1,5 +1,6 @@
+from django.db.models import Sum
+
 from .models import WeeklyConsumption, DailyConsumption
-from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
 from rest_framework import permissions
 from .serializers import DailyConsumptionSerializer, WeeklyConsumptionSerializer
@@ -28,7 +29,6 @@ class DailyConsumptionViewSet(viewsets.ModelViewSet):
     #############################################################################
     # SHOW ONE - SHOW JUST ONE DAY
     def retrieve(self, *args, **kwargs):
-
         queryset = DailyConsumption.objects.get(pk=int(kwargs['pk'][0]))
         results = DailyConsumptionSerializer(queryset)
         return Response(results.data, status=200)
@@ -72,11 +72,24 @@ class DailyConsumptionViewSet(viewsets.ModelViewSet):
     # day_consumed
 
     def partial_update(self, request, *args, **kwargs):
-        print('*** partial update yeehaw ***')
         daily_consumption_instance = self.get_object()
 
-        daily_consumption_instance.daily_servings = request.data.get('daily_servings', daily_consumption_instance.daily_servings)
-
+        daily_consumption_instance.daily_servings = request.data.get('daily_servings',
+                                                                     daily_consumption_instance.daily_servings)
         daily_consumption_instance.save()
+
         serializer = DailyConsumptionSerializer(daily_consumption_instance)
         return Response(serializer.data)
+
+
+class WeeklyConsumptionTotal(generics.ListCreateAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = DailyConsumptionSerializer
+
+    ##### GET TOTAL SERVINGS FROM DATABASE AND SUMMATE THEM ####
+    def get_queryset(self):
+        # queryset = WeeklyConsumption.objects.all().filter(owner=self.request.user).aggregate(Sum('daily_servings'))
+        # return queryset
+
+        if self.kwargs.get("daily_consumption_pk"):
+            weekly_total = DailyConsumption.objects.all().filter(owner=self.request.user).aggregate(Sum('daily_servings'))

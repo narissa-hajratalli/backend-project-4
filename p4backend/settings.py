@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
+import datetime
 from pathlib import Path
 # import django_heroku
 
@@ -65,6 +65,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# Overriding DRF JWT settings
+JWT_AUTH = {'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=5184000),
+            'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=60),}
+
 
 ROOT_URLCONF = 'p4backend.urls'
 
@@ -137,6 +142,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # django_heroku.settings(locals())
+
+
 
 
 

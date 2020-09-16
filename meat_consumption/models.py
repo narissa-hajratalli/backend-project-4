@@ -22,7 +22,7 @@ class DailyConsumption(models.Model):
 class WeeklyConsumption(models.Model):
     # days_consumed_this_week = models.ForeignKey(DailyConsumption, on_delete=models.CASCADE)  # want to capture an array of all days of the week meat was consumed
     weekly_total_consumption = models.ForeignKey(DailyConsumption, on_delete=models.CASCADE)  # use aggregate method to sum the total of servings from DailyConsumption.daily_serving
-    week_start = models.DateField # starting day of the week
+    # week_start = models.DateField # starting day of the week
 
     class Meta:
         verbose_name_plural = 'weekly_consumptions'
