@@ -11,11 +11,11 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import datetime
 from pathlib import Path
+
 # import django_heroku
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -28,7 +28,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -40,8 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'authentication.apps.AuthenticationConfig',
     'meat_consumption.apps.MeatConsumptionConfig',
-    'rest_framework'
+    'rest_framework',
+    'corsheaders'
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
@@ -64,12 +66,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware'
 ]
 
 # Overriding DRF JWT settings
 JWT_AUTH = {'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=5184000),
-            'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=60),}
-
+            'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=60), }
 
 ROOT_URLCONF = 'p4backend.urls'
 
@@ -91,7 +93,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'p4backend.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -101,7 +102,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -121,7 +121,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -135,17 +134,9 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
 
 # django_heroku.settings(locals())
-
-
-
-
-
-
-

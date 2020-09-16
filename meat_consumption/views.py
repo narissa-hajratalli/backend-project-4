@@ -41,7 +41,8 @@ class DailyConsumptionViewSet(viewsets.ModelViewSet):
             owner=request.user,
             consumed=request.data.get('consumed'),
             daily_servings=request.data.get('daily_servings'),
-            day_consumed=request.data.get('day_consumed')
+            day_consumed=request.data.get('day_consumed'),
+            # weekly_consumption=request.data.get('weekly_consumption_id')
         )
         if day:
             msg = 'Log for this day already exists'
@@ -50,7 +51,9 @@ class DailyConsumptionViewSet(viewsets.ModelViewSet):
 
     # saves the information
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        print("perform_create")
+        week = WeeklyConsumption.objects.get(pk=self.request.data.get('weekly_consumption_id'))
+        serializer.save(owner=self.request.user, weekly_consumption=week)
 
     #############################################################################
     # DESTROY - DELETE A DAILY RECORD OF WHEN MEAT WAS CONSUMED
@@ -86,10 +89,4 @@ class WeeklyConsumptionTotal(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = DailyConsumptionSerializer
 
-    ##### GET TOTAL SERVINGS FROM DATABASE AND SUMMATE THEM ####
-    def get_queryset(self):
-        # queryset = WeeklyConsumption.objects.all().filter(owner=self.request.user).aggregate(Sum('daily_servings'))
-        # return queryset
-
-        if self.kwargs.get("daily_consumption_pk"):
-            weekly_total = DailyConsumption.objects.all().filter(owner=self.request.user).aggregate(Sum('daily_servings'))
+    ##### GET DAILY LOGS FOR ONE WEEK AT A TIME ####
