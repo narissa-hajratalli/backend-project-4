@@ -13,7 +13,7 @@ from rest_framework.exceptions import (
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
-# Create your views here.
+################ VIEWS #################
 
 class DailyConsumptionViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
@@ -27,28 +27,11 @@ class DailyConsumptionViewSet(viewsets.ModelViewSet):
 
     #############################################################################
     # SHOW ONE - SHOW JUST ONE DAY
-    def retrieve(self, pk):
-        queryset = DailyConsumption.objects.get(pk=self.kwargs['pk'])
-        return queryset
+    def retrieve(self, *args, **kwargs):
 
-    # def retrieve(self, request, *args, **kwargs):
-    #     daily_consumption = DailyConsumption.objects.get(pk=self.kwargs['pk'])
-    #     queryset = DailyConsumption.objects.filter(
-    #         pk=self.kwargs['pk']
-    #     )
-    #     return queryset
-
-    def retrieve(self, request, *args, **kwargs):
-        daily_consumption = DailyConsumption.objects.get(pk=self.kwargs['pk'])
-        return Response({
-
-        })
-        return queryset
-
-    # def get_queryset(self):
-    #     if self.kwargs.get("pk"):
-    #         daily_consumption = DailyConsumption.objects.get(pk=self.kwargs["pk"])
-    #         return daily_consumption
+        queryset = DailyConsumption.objects.get(pk=int(kwargs['pk'][0]))
+        results = DailyConsumptionSerializer(queryset)
+        return Response(results.data, status=200)
 
     #############################################################################
     # CREATE - CREATE A RECORD OF A DAY THAT MEAT WAS CONSUMED
@@ -75,7 +58,7 @@ class DailyConsumptionViewSet(viewsets.ModelViewSet):
     def destroy(self, request, *args, **kwargs):
 
         # gets the primary key of the day if it exists
-        daily_consumption = DailyConsumption.objects.get(pk=self.kwargs["daily_consumption_pk"])
+        daily_consumption = DailyConsumption.objects.get(pk=self.kwargs["pk"])
 
         # finds if the logged in user is the owner of the category
         if not request.user == daily_consumption.owner:
@@ -84,23 +67,16 @@ class DailyConsumptionViewSet(viewsets.ModelViewSet):
 
     #############################################################################
     # UPDATE - PARTIAL UPDATE FOR JUST SERVING WHEN DAILY RECORD HAS BEEN CREATED
-    # Don't allow user to input new date if already entered. Only allow user to update consumed and servings
+    # Don't allow user to input new date if already entered. Only allow user to update servings.
+    # The user will have to delete the entry if they put in an incorrect value for consumed or
+    # day_consumed
 
+    def partial_update(self, request, *args, **kwargs):
+        print('*** partial update yeehaw ***')
+        daily_consumption_instance = self.get_object()
 
-# class SingleDailyConsumption(generics.RetrieveUpdateDestroyAPIView):
-#     permission_classes = (IsAuthenticated,)
-#     serializer_class = DailyConsumptionSerializer
-#
-#     def retrieve(self, kwargs):
-#         queryset = DailyConsumption.objects.get(pk=self.kwargs["pk"])
-#         return queryset
-#
-#     def get_queryset(self):
-#         if self.kwargs.get("daily_consumption_pk"):
-#             daily_consumption = DailyConsumption.objects.get(pk=self.kwargs["daily_consumption_pk"])
-#             queryset = DailyConsumption.objects.filter(
-#                 pk=self.kwargs['daily_consumption_pk'],
-#                 owner=self.request.user,
-#                 daily_consumption=daily_consumption
-#             )
-#             return queryset
+        daily_consumption_instance.daily_servings = request.data.get('daily_servings', daily_consumption_instance.daily_servings)
+
+        daily_consumption_instance.save()
+        serializer = DailyConsumptionSerializer(daily_consumption_instance)
+        return Response(serializer.data)
