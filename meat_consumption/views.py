@@ -37,15 +37,15 @@ class WeeklyConsumptionViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     #############################################################################
-    #### CREATE A WEEK ####
-    def create(self, request, *args, **kwargs):
-        data = request.data
+    #### CREATE A WEEK ###
 
-        weekly_consumption = WeeklyConsumption.objects.create(
-            week_number=data['week_number'],
+    def create(self, request, *args, **kwargs):
+        weekly_consumption = WeeklyConsumption.objects.filter(
+            week_number=request.data.get('week_number'),
+            owner=request.user
         )
         if weekly_consumption:
-            msg = 'Week already exists'
+            msg = 'Week number already exists'
             raise ValidationError(msg)
         return super().create(request)
 
@@ -55,12 +55,22 @@ class WeeklyConsumptionViewSet(viewsets.ModelViewSet):
 
     #############################################################################
     ### DELETE A WEEK ###
+    # def destroy(self, request, *args, **kwargs):
+    #     weekly_consumption = WeeklyConsumption.objects.get(pk=self.kwargs["pk"])
+    #
+    #     # finds if the logged in user is the owner of the week
+    #     if not request.user == weekly_consumption.owner:
+    #         raise PermissionDenied("You cannot delete this category")
+    #     return super().destroy(request, *args, **kwargs)
+
+
     def destroy(self, request, *args, **kwargs):
         weekly_consumption = WeeklyConsumption.objects.get(pk=self.kwargs["pk"])
+        print(weekly_consumption)
 
-        # finds if the logged in user is the owner of the week
         if not request.user == weekly_consumption.owner:
-            raise PermissionDenied("You cannot delete this category")
+           raise PermissionDenied("You cannot delete this category")
+
         return super().destroy(request, *args, **kwargs)
 
 ###############################################################################

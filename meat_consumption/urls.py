@@ -10,7 +10,8 @@ router.register('weekly_consumption', WeeklyConsumptionViewSet, basename='weekly
 
 
 custom_urlpatterns = [
-   url(r'daily_consumption/(?P<pk>\d+)$', DailyConsumptionViewSet, name='daily_consumption_per_day'),
+   # url(r'daily_consumption/(?P<pk>\d+)$', DailyConsumptionViewSet, name='daily_consumption'),
+   # url(r'weekly_consumption/(?P<pk>\d+)$', WeeklyConsumptionViewSet, name='weekly_consumption'),
    url(r'weekly_consumption/(?P<weekly_consumption_pk>\d+)/daily_consumption$', WeeklyDaily.as_view(), name='weekly_daily')
 ]
 
