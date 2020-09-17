@@ -55,23 +55,16 @@ class WeeklyConsumptionViewSet(viewsets.ModelViewSet):
 
     #############################################################################
     ### DELETE A WEEK ###
-    # def destroy(self, request, *args, **kwargs):
-    #     weekly_consumption = WeeklyConsumption.objects.get(pk=self.kwargs["pk"])
-    #
-    #     # finds if the logged in user is the owner of the week
-    #     if not request.user == weekly_consumption.owner:
-    #         raise PermissionDenied("You cannot delete this category")
-    #     return super().destroy(request, *args, **kwargs)
-
 
     def destroy(self, request, *args, **kwargs):
+        print(self.kwargs)
         weekly_consumption = WeeklyConsumption.objects.get(pk=self.kwargs["pk"])
-        print(weekly_consumption)
 
         if not request.user == weekly_consumption.owner:
-           raise PermissionDenied("You cannot delete this category")
+            raise PermissionDenied("You cannot delete this week")
 
         return super().destroy(request, *args, **kwargs)
+
 
 ###############################################################################
 
@@ -82,7 +75,6 @@ class WeeklyDaily(generics.ListCreateAPIView):
     def get_queryset(self):
         if self.kwargs.get("weekly_consumption_pk"):
             weekly_consumption = WeeklyConsumption.objects.get(pk=self.kwargs['weekly_consumption_pk'])
-
             queryset = DailyConsumption.objects.filter(
                 owner=self.request.user,
                 weekly_consumption=weekly_consumption
@@ -91,6 +83,7 @@ class WeeklyDaily(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+
 
 ###############################################################################
 
@@ -159,5 +152,5 @@ class DailyConsumptionViewSet(viewsets.ModelViewSet):
         daily_consumption_instance.save()
 
         serializer = DailyConsumptionSerializer(daily_consumption_instance)
-        return Response(serializer.data)
 
+        return Response(serializer.data)
