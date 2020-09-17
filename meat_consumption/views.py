@@ -15,19 +15,88 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
 ################ VIEWS #################
+class WeeklyConsumptionViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = WeeklyConsumptionSerializer
+
+    #############################################################################
+    ##### GET ALL THE WEEKS ####
+    def get_queryset(self):
+        queryset = WeeklyConsumption.objects.all().filter(owner=self.request.user)
+        return queryset
+
+    #############################################################################
+    ### GET ONE WEEK ###
+    def retrieve(self, request, *args, **kwargs):
+        print('*** retrieve is called ***')
+
+        weekly_consumption_instance = self.get_object()
+
+        serializer = WeeklyConsumptionSerializer(weekly_consumption_instance)
+
+        return Response(serializer.data)
+
+    #############################################################################
+    #### CREATE A WEEK ####
+    def create(self, request, *args, **kwargs):
+        data = request.data
+
+        weekly_consumption = WeeklyConsumption.objects.create(
+            week_number=data['week_number'],
+        )
+        if weekly_consumption:
+            msg = 'Week already exists'
+            raise ValidationError(msg)
+        return super().create(request)
+
+    # saves the information
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+    #############################################################################
+    ### DELETE A WEEK ###
+    def destroy(self, request, *args, **kwargs):
+        weekly_consumption = WeeklyConsumption.objects.get(pk=self.kwargs["pk"])
+
+        # finds if the logged in user is the owner of the week
+        if not request.user == weekly_consumption.owner:
+            raise PermissionDenied("You cannot delete this category")
+        return super().destroy(request, *args, **kwargs)
+
+###############################################################################
+
+class WeeklyDaily(generics.ListCreateAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = DailyConsumptionSerializer
+
+    def get_queryset(self):
+        if self.kwargs.get("weekly_consumption_pk"):
+            weekly_consumption = WeeklyConsumption.objects.get(pk=self.kwargs['weekly_consumption_pk'])
+
+            queryset = DailyConsumption.objects.filter(
+                owner=self.request.user,
+                weekly_consumption=weekly_consumption
+            )
+            return queryset
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+###############################################################################
 
 class DailyConsumptionViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     serializer_class = DailyConsumptionSerializer
 
     #############################################################################
-    # READ - SHOW ALL DAYS (just for testing)
+    # READ - SHOW ALL DAYS (regardless of week) (just for testing)
     def get_queryset(self):
         queryset = DailyConsumption.objects.all().filter(owner=self.request.user)
         return queryset
 
     #############################################################################
     # SHOW ONE - SHOW JUST ONE DAY
+    # Ex: /daily_consumption/1
     def retrieve(self, *args, **kwargs):
         queryset = DailyConsumption.objects.get(pk=int(kwargs['pk'][0]))
         results = DailyConsumptionSerializer(queryset)
@@ -36,13 +105,11 @@ class DailyConsumptionViewSet(viewsets.ModelViewSet):
     #############################################################################
     # CREATE - CREATE A RECORD OF A DAY THAT MEAT WAS CONSUMED
     def create(self, request, *args, **kwargs):
-        # check if the day already exists for the current logged in user
         day = DailyConsumption.objects.filter(
             owner=request.user,
             consumed=request.data.get('consumed'),
             daily_servings=request.data.get('daily_servings'),
             day_consumed=request.data.get('day_consumed'),
-            # weekly_consumption=request.data.get('weekly_consumption_id')
         )
         if day:
             msg = 'Log for this day already exists'
@@ -84,9 +151,3 @@ class DailyConsumptionViewSet(viewsets.ModelViewSet):
         serializer = DailyConsumptionSerializer(daily_consumption_instance)
         return Response(serializer.data)
 
-
-class WeeklyConsumptionTotal(generics.ListCreateAPIView):
-    permission_classes = (IsAuthenticated,)
-    serializer_class = DailyConsumptionSerializer
-
-    ##### GET DAILY LOGS FOR ONE WEEK AT A TIME ####

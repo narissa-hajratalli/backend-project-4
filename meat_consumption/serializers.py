@@ -8,10 +8,7 @@ class DailyConsumptionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DailyConsumption
-
-        # what are the fields you would like to serialize, i.e. convert back and forth to json data
-        # django provides the id, i.e. the primary key
-        fields = ('consumed', 'daily_servings', 'day_consumed', 'owner', 'id', 'weekly_total')
+        fields = ('id', 'weekly_consumption_id', 'owner', 'consumed', 'daily_servings', 'day_consumed', 'weekly_total')
 
 
 class WeeklyConsumptionSerializer(serializers.ModelSerializer):
@@ -19,4 +16,4 @@ class WeeklyConsumptionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WeeklyConsumption
-        # fields = ('weekly_total_consumption', 'week_start')
+        fields = ('week_number', 'owner', 'id')
