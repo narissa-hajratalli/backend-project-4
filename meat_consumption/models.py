@@ -27,10 +27,10 @@ class WeeklyConsumption(models.Model):
 
 
 class DailyConsumption(models.Model):
-    consumed = models.BooleanField(default=False)
+    consumed = models.CharField(max_length=3)
     daily_servings = models.PositiveSmallIntegerField(0)
-    day_consumed = models.DateField(default="2020-09-14")  # just the day of the week & date of the day meat was consumed, shows just individual day consumed
-    weekly_consumption = models.ForeignKey(WeeklyConsumption, on_delete=models.CASCADE)
+    day_consumed = models.CharField(max_length=50)  # just the day of the week & date of the day meat was consumed, shows just individual day consumed
+    weekly_consumption = models.ForeignKey(WeeklyConsumption, on_delete=models.CASCADE, default=0)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, default=1, on_delete=models.CASCADE)
 
     class Meta:
