@@ -26,7 +26,7 @@ SECRET_KEY = '6_4@ktvr&79ur9_!hpqx2sss4qwirb)m1*&fihj*_+nn=v=p+9'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["https://leaft.netlify.app/"]
 
 # Application definition
 
