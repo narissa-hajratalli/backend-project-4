@@ -94,6 +94,17 @@ I created a loop within my weekly_consumption model to calculate the total servi
 ## Issues and Resolutions
  
 ####
-Issue
-I ran into a roadblock when I wanted to show 1 daily log at a time. This was the first error I got when I tested the route in Postman.
-``` TypeError: __init__() takes 1 positional argument but 2 were given ```
+Issue: I ran into a roadblock when I wanted to show 1 daily log at a time. This was the first error I got when I tested the route in Postman.
+```
+TypeError: __init__() takes 1 positional argument but 2 were given
+```
+
+Resolution: I used retrieve for my show one method. I set queryset equal to the DailyConsumption object.
+It first queries through the DailyConsumption table and gets only the entries that have a primary key value (it’s id)
+equal to the keyword argument daily_consumption_pk that is grabbed from the endpoint.
+```
+def retrieve(self, *args, **kwargs):
+    queryset = DailyConsumption.objects.get(pk=int(kwargs['pk'][0]))
+    results = DailyConsumptionSerializer(queryset)
+    return Response(results.data, status=200)
+```
