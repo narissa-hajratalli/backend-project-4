@@ -3,6 +3,12 @@
 ## Live Website
 https://leaft.netlify.app/
 
+## Daily Documentation
+- [Day 1](https://medium.com/@narissa_hajratalli/leaft-day-1-sept-14th-3aa38c30cca9)
+- [Day 2](https://medium.com/@narissa_hajratalli/leaft-day-2-sept-15th-868f70ce6dd6)
+- [Day 3](https://medium.com/@narissa_hajratalli/leaft-day-3-sept-16th-737a40c853a7)
+- [Days 4-6](https://medium.com/@narissa_hajratalli/leaft-day-4-6-sept-17th-18th-21st-a7986f832d46)
+
 ## Project Schedule
 
 |  Day | Deliverable | Status
