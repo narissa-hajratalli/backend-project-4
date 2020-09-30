@@ -1,8 +1,11 @@
 # Project Proposal - Backend Development
 
 ## Live Website
-https://leaft.netlify.app/
-[Frontend Development](https://github.com/narissa-hajratalli/frontend-project-4)
+https://leaft.netlify.app/ 
+
+
+## Frontend Development
+https://github.com/narissa-hajratalli/frontend-project-4
 
 ## Daily Documentation
 - [Day 1](https://medium.com/@narissa_hajratalli/leaft-day-1-sept-14th-3aa38c30cca9)
